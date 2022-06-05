@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<head><title>Список пользователей</title></head>
+<div class="container px-4 px-lg-5 text-center">
+	<h2 class="text-center mt-5">Список пользоваелей</h2>
+	<div class="col-md-12">
+		<table class="table mt-4">
+			<thead>
+			<tr>
+				<th scope="col">Имя</th>
+				<th scope="col">Фамилия</th>
+				<th scope="col">Логин</th>
+				<th scope="col">Почта</th>
+			</tr>
+			</thead>
+			<tbody>
+			{% for user in users %}
+			<tr>
+				<td>{{ user.first_name }}</td>
+				<td>{{ user.last_name }}</td>
+				<td>{{ user.username }}</td>
+				<td>{{ user.email }}</td>
+			</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<head>
+	<title>Профиль</title>
+</head>
+<div class="container px-4 px-lg-5 mt-5 text-center">
+	{% if messages %}
+	{% for message in messages %}
+	<div class="alert alert-info alert-dismissible fade show mb-5" role="alert">
+		<strong>{{ message }}</strong>
+		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+	</div>
+	{% endfor %}
+	{% endif %}
+	{% if user.is_superuser %}
+	<a class="ms-2 btn btn-primary" href="{% url 'show_users' %}">Пользователи</a>
+	{% endif %}
+	<h3 class="mt-5 mb-5">Ваши заказы ({{ request.user.username }})</h3>
+
+	{% if not orders.count %}
+	<div class="col-md-12 mt-5 mb-5">
+		<h4>Заказов нет</h4>
+	</div>
+	{% else %}
+	<div class="col-md-12">
+		<table class="table">
+			<thead>
+			<tr>
+				<th scope="col">Номер</th>
+				<th scope="col">Статус</th>
+				<th scope="col">Имя</th>
+				<th scope="col">Сумма</th>
+				<th scope="col" class="w-50">Товар</th>
+			</tr>
+			</thead>
+			<tbody>
+			{% for order in orders %}
+			<tr>
+				<th scope="row">{{ order.id }}</th>
+				<td>{{ order.get_status_display }}</td>
+				<td>{{ order.first_name }} {{ order.last_name }}</td>
+				<td>{{ order.cart.final_price }} BYN</td>
+				<td>
+					<ul>
+						{% for item in order.cart.clothes.all %}
+						<li class="list-group-item">{{ item.content_object.title }} x {{ item.qty }}</li>
+						{% endfor %}
+					</ul>
+				</td>
+			</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	{% endif %}
+</div>
+{% endblock %}

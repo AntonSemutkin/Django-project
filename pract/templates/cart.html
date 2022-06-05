@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<head><title>Корзина</title></head>
+<header class="bg-dark py-1">
+	<div class="container px-4 px-lg-5">
+		<div class="text-center text-white">
+			<h1 class="display-5 fw-bolder mb-5">Корзина {% if not cart.product.count %}пуста{% endif %}</h1>
+		</div>
+	</div>
+</header>
+<div class="container px-4 px-lg-5">
+	{% if messages %}
+	{% for message in messages %}
+	<div class="alert alert-info alert-dismissible fade show mt-5" role="alert">
+		<strong>{{ message }}</strong>
+		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+	</div>
+	{% endfor %}
+	{% endif %}
+	<table class="table mt-5 text-center">
+		<thead>
+		<tr class="">
+			<th scope="col">Наименование</th>
+			<th scope="col"></th>
+			<th scope="col">Цена</th>
+			<th scope="col" style="width: 10%;">Кол-во</th>
+			<th scope="col">Общая цена</th>
+			<th scope="col"></th>
+		</tr>
+		</thead>
+		{% if cart.product.count %}
+		<tbody>
+		{% for item in cart.product.all %}
+		<tr>
+			<td scope="row" class="w-25">{{ item.content_object.title }}</td>
+			<td class="w-25"><img src="{{ item.content_object.image.url}}" class="img-fluid w-50"></td>
+			<td><i>{{ item.content_object.price }} BYN</i></td>
+			<td>
+				<form action="{% url 'change_qty' ct_model=item.content_object.get_model_name slug=item.content_object.slug %}" method="POST">
+					{% csrf_token %}
+					<input type="number" min="1" name="qty" value="{{ item.qty }}" class="form-control"><br>
+					<input type="submit" class="btn btn-primary mb-1" value="Изменить">
+				</form>
+				<a href="{% url 'delete_from_cart' ct_model=item.content_object.get_model_name slug=item.content_object.slug %}">
+					<button class="btn btn-danger">Удалить</button>
+				</a>
+			</td>
+			<td>{{ item.final_price }} BYN</td>
+			<td></td>
+		</tr>
+		{% endfor %}
+		<tr>
+			<td colspan="4"></td>
+			<td>
+				<a href="{% url 'checkout' %}"><button class="btn btn-primary">Оформить<br><strong>{{ cart.final_price }} BYN</strong></button></a>
+			</td>
+		</tr>
+		</tbody>
+		{% endif %}
+	</table>
+</div>
+{% endblock content %}

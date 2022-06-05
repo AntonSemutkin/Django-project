@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+<head><title>{{ product.title }}</title></head>
+<section class="mt-5">
+	<div class="container px-4 my-3">
+		<div class="row gx-4 gx-lg-5 align-items-top">
+			<div class="col-md-6"><img class="card-img-top mb-0 mb-md-0" src="{{ product.image.url }}" alt="..." /></div>
+			<div class="col-md-6">
+				<h1 class="display-5 fw-bolder">{{ product.title }}</h1>
+				<p class="lead">{{ product.description }}</p>
+				<div class="fs-6">
+                    {% if product.category.slug == 'minimallyinvasiveurology' %}
+					{% include 'specs/minimallyinvasiveurology_specifications.html' %}
+					{% elif product.category.slug == 'glassware' %}
+					{% include 'specs/glassware_specifications.html' %}
+					{% elif product.category.slug == 'disinfectants' %}
+					{% include 'specs/disinfectants_specifications.html' %}
+					{% endif %}
+					{% if request.user.is_authenticated %}
+					{% if request.user.is_superuser %}
+					<a class="btn btn-primary" href="{% url 'product_update' ct_model=product.get_model_name slug=product.slug %}">Изменить</a>
+					<a class="btn btn-danger" href="{% url 'product_delete' ct_model=product.get_model_name slug=product.slug %}">Удалить</a>
+					{% endif %}
+					<a class="btn btn-success" href="{% url 'add_to_cart' ct_model=ct_model slug=product.slug %}">Добавить в корзину</a>
+					{% else %}
+					<h4 class="">Войдите в систему чтобы купить товар</h4>
+					{% endif %}
+                </div>
+			</div>
+		</div>
+	</div>
+</section>
+{% endblock content %}

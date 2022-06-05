@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<head><title>Регистрация</title></head>
+<div class="mt-5 mx-auto w-50 row">
+	<div class="">
+		<h3 class="text-center mb-3">Регистрация</h3>
+		<form action="" method="POST">
+			{% csrf_token %}
+			{{ form|crispy }}
+			<input type="submit" class="btn btn-success" value="Зарегистрироваться">
+		</form>
+	</div>
+</div>
+
+
+{% endblock %}
